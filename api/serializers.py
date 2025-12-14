@@ -15,7 +15,7 @@ class PaqueteSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Paquete
-        fields = ['id', 'nombre', 'destino', 'destinos_id', 'fecha', 'usuario_creador', 'usuario_modificador', 'fecha_modificacion', 'precio_total']
+        fields = ['id', 'nombre', 'precio_total', 'destino', 'destinos_id', 'fecha', 'usuario_creador', 'usuario_modificador', 'fecha_modificacion']
         read_only_fields = ['usuario_creador', 'usuario_modificador', 'fecha_modificacion', 'precio_total']
 
 

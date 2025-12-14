@@ -22,14 +22,15 @@ class Paquete(models.Model):
     destinos = models.ManyToManyField(Destino, related_name='paquetes')
     fecha = models.DateField()
 
-    usuario_creador = models.ForeignKey('auth.User', on_delete=models.CASCADE, null=True, related_name='paquetes_creados')
-    usuario_modificador = models.ForeignKey('auth.User', on_delete=models.CASCADE, null=True, related_name='paquetes_modificados')
+    usuario_creador = models.ForeignKey('auth.User', on_delete=models.PROTECT, null=True, related_name='paquetes_creados')
+    usuario_modificador = models.ForeignKey('auth.User', on_delete=models.PROTECT, null=True, related_name='paquetes_modificados')
     fecha_modificacion = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.id} - {self.nombre} - {self.fecha}"
     
     # Método para calcular la suma de los destinos incluidos en el paquete
+    @property
     def precio_total(self):
         total = sum(destino.costo for destino in self.destinos.all())
         return total
@@ -37,8 +38,8 @@ class Paquete(models.Model):
 
 class Reserva(models.Model):
     id = models.AutoField(auto_created=True, primary_key=True)
-    usuario = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    paquete = models.ForeignKey(Paquete, on_delete=models.CASCADE)
+    usuario = models.ForeignKey('auth.User', on_delete=models.PROTECT)
+    paquete = models.ForeignKey(Paquete, on_delete=models.PROTECT)
     fecha_reserva = models.DateTimeField(auto_now_add=True)
     estado = models.CharField(max_length=20, default='Confirmada')
 
