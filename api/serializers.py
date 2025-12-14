@@ -5,16 +5,18 @@ class DestinoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Destino
         fields = ['id', 'nombre', 'descripcion', 'actividades', 'costo', 'usuario_creador', 'usuario_modificador', 'fecha_modificacion']
+        read_only_fields = ['usuario_creador', 'usuario_modificador', 'fecha_modificacion']
 
 
 class PaqueteSerializer(serializers.ModelSerializer):
     destino = DestinoSerializer(many=True, read_only=True)
     #Como es relacion ManyToMany se usa PrimaryKeyRelatedField y many=True
-    destinos_id = serializers.PrimaryKeyRelatedField(many=True, queryset=Destino.objects.all(),source='destino', write_only=True) #Para escribir los id de los destinos al crear o actualizar un paquete
+    destinos_id = serializers.PrimaryKeyRelatedField(many=True, write_only=True, queryset=Destino.objects.all(), source='destinos')
     
     class Meta:
         model = Paquete
         fields = ['id', 'nombre', 'destino', 'destinos_id', 'fecha', 'usuario_creador', 'usuario_modificador', 'fecha_modificacion', 'precio_total']
+        read_only_fields = ['usuario_creador', 'usuario_modificador', 'fecha_modificacion', 'precio_total']
 
 
 class ReservaSerializer(serializers.ModelSerializer):
